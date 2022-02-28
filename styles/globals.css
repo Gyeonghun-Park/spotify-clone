@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.test {
+  @apply flex min-h-screen w-full flex-col items-center justify-center bg-[#202020];
+}
