@@ -6,6 +6,7 @@ import {
   RssIcon,
   HeartIcon,
 } from '@heroicons/react/outline'
+import { signOut, useSession } from 'next-auth/react'
 
 const style = {
   wrapper: `border-r border-gray-900 p-5 text-sm text-gray-500`,
@@ -17,9 +18,15 @@ const style = {
 }
 
 function Sidebar() {
+  const { data: session, status } = useSession()
+  console.log(session)
+
   return (
     <div className={style.wrapper}>
       <div className={style.container}>
+        <button className={style.iconContainer} onClick={() => signOut()}>
+          <p>Log out</p>
+        </button>
         <button className={style.iconContainer}>
           <HomeIcon className={style.icon} />
           <p>Home</p>
