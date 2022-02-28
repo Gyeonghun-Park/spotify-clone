@@ -19,12 +19,19 @@
       "@pages/*": ["pages/*"],
       "@components": ["components"],
       "@components/*": ["components/*"],
-      "@contexts/*": ["contexts/*"],
+      "@hooks/*": ["hooks/*"],
       "@images/*": ["images/*"],
       "@lib/*": ["lib/*"],
-      "@styles/*": ["styles/*"],
+      "@styles/*": ["styles/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/_app.jsx", "pages/index.tsx", "components/index.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "pages/_app.jsx",
+    "pages/index.tsx",
+    "components/index.js"
+  ],
   "exclude": ["node_modules"]
 }

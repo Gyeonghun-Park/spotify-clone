@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .test {
-  @apply flex min-h-screen w-full flex-col items-center justify-center bg-[#202020];
+  @apply flex cursor-pointer items-center space-x-3 rounded-full bg-[#202020] p-1 pr-2 text-white opacity-90 hover:opacity-80;
 }

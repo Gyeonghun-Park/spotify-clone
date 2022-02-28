@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Sidebar } from '@components'
+import { Sidebar, Center } from '@components'
 
 function Home() {
   return (
@@ -9,9 +9,9 @@ function Home() {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
 
-      <main>
+      <main className={style.content}>
         <Sidebar />
-        {/* Center */}
+        <Center />
       </main>
 
       <div>{/* Player */}</div>
@@ -23,5 +23,5 @@ export default Home
 
 const style = {
   wrapper: `h-screen overflow-y-hidden bg-[#202020]`,
-  content: `flex w-2/3 max-w-[1400px] justify-between`,
+  content: `flex`,
 }
