@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { signOut, useSession } from 'next-auth/react'
+import { useRecoilState } from 'recoil'
 import {
   HomeIcon,
   SearchIcon,
@@ -9,18 +10,20 @@ import {
   HeartIcon,
 } from '@heroicons/react/outline'
 import useSpotify from '@hooks/useSpotify'
+import { playlistIdState } from '@atoms/playlistAtom'
 
 const style = {
-  wrapper: `h-screen overflow-y-scroll border-r border-gray-900 bg-black p-5 text-sm text-gray-500 scrollbar-hide`,
+  wrapper: `h-screen overflow-y-scroll border-r border-gray-900 bg-black p-5 text-xs lg:text-sm text-gray-500 scrollbar-hide sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex`,
   container: `space-y-4`,
   iconContainer: `flex items-center space-x-2 hover:text-white`,
   icon: `h-5 w-5`,
   divider: `border-t-[0.1px] border-gray-900`,
-  playlistContainer: `cursor-pointer hover:text-white`,
+  playlistItem: `cursor-pointer hover:text-white`,
 }
 
 function Sidebar() {
   const [playlists, setPlaylists] = useState([])
+  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState)
   const { data: session, status } = useSession()
   const spotifyApi = useSpotify()
 
@@ -77,7 +80,11 @@ function Sidebar() {
         <hr className={style.divider} />
 
         {playlists.map((playlist) => (
-          <p key={playlist.id} className={style.playlistContainer}>
+          <p
+            key={playlist.id}
+            onClick={() => setPlaylistId(playlist.id)}
+            className={style.playlistItem}
+          >
             {playlist.name}
           </p>
         ))}

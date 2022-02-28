@@ -20,8 +20,9 @@
       "@components": ["components"],
       "@components/*": ["components/*"],
       "@hooks/*": ["hooks/*"],
-      "@images/*": ["images/*"],
+      "@atoms/*": ["atoms/*"],
       "@lib/*": ["lib/*"],
+      "@images/*": ["images/*"],
       "@styles/*": ["styles/*"]
     }
   },

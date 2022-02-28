@@ -1,5 +1,11 @@
 import Head from 'next/head'
-import { Sidebar, Center } from '@components'
+import { Sidebar, Center, Player } from '@components'
+
+const style = {
+  wrapper: `h-screen overflow-y-hidden bg-[#202020]`,
+  main: `flex`,
+  player: `sticky bottom-0`,
+}
 
 function Home() {
   return (
@@ -9,19 +15,16 @@ function Home() {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
 
-      <main className={style.content}>
+      <main className={style.main}>
         <Sidebar />
         <Center />
       </main>
 
-      <div>{/* Player */}</div>
+      <div className={style.player}>
+        <Player />
+      </div>
     </div>
   )
 }
 
 export default Home
-
-const style = {
-  wrapper: `h-screen overflow-y-hidden bg-[#202020]`,
-  content: `flex`,
-}
