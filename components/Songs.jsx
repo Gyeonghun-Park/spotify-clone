@@ -10,8 +10,8 @@ function Songs() {
   const playlist = useRecoilValue(playlistState)
   return (
     <div className={style.wrapper}>
-      {playlist?.tracks.items.map((track, i) => (
-        <Song key={track.id} track={track.track} order={i} />
+      {playlist?.tracks.items.map(({ track }, i) => (
+        <Song key={track.id} track={track} order={i} />
       ))}
     </div>
   )

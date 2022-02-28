@@ -25,7 +25,7 @@ function Song({ order, track }) {
   }
 
   return (
-    <div className={style.wrapper}>
+    <div className={style.wrapper} onClick={playSong}>
       <div className={style.trackLeft}>
         <p>{order + 1}</p>
         <div>

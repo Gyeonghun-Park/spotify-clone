@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .button {
+    @apply h-5 w-5 transform cursor-pointer transition duration-150 ease-in-out hover:scale-125;
+  }
+}
+
 .test {
-  @apply grid cursor-pointer grid-cols-2 rounded-lg py-4 px-5 text-gray-500 hover:bg-gray-900;
+  @apply grid h-24 grid-cols-3 border-t border-gray-700 bg-gradient-to-b from-[#202020] to-black px-2 text-xs text-white md:px-8 md:text-base;
 }

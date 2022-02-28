@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import { Sidebar, Center, Player } from '@components'
 
 const style = {
@@ -10,11 +9,6 @@ const style = {
 function Home() {
   return (
     <div className={style.wrapper}>
-      <Head>
-        <title>Spotify 2.0</title>
-        {/* <link rel="icon" href="/favicon.ico" /> */}
-      </Head>
-
       <main className={style.main}>
         <Sidebar />
         <Center />
