@@ -9,5 +9,5 @@
 }
 
 .test {
-  @apply grid h-24 grid-cols-3 border-t border-gray-700 bg-gradient-to-b from-[#202020] to-black px-2 text-xs text-white md:px-8 md:text-base;
+  @apply flex flex-1 items-center justify-around self-center;
 }

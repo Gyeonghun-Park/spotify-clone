@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
+import { useRecoilState } from 'recoil'
+import { debounce } from 'lodash'
 import {
   FastForwardIcon,
   PauseIcon,
@@ -13,8 +15,8 @@ import {
 import { VolumeUpIcon as VolumeDownIcon } from '@heroicons/react/outline'
 import useSpotify from '@hooks/useSpotify'
 import useSongInfo from '@hooks/useSongInfo'
-import { useRecoilState } from 'recoil'
 import { currentTrackIdState, isPlayingState } from '@atoms/songAtom'
+import { modalState } from '@atoms/modalAtom'
 
 const style = {
   wrapper: `grid h-24 grid-cols-3 border-t border-gray-700 bg-gradient-to-b from-[#202020] to-black px-2 text-xs text-white md:px-8 md:text-base`,
@@ -29,34 +31,57 @@ function Player() {
     useRecoilState(currentTrackIdState)
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState)
   const [volume, setVolume] = useState(50)
+  const [modal, setModal] = useRecoilState(modalState)
 
-  const fetchCurrentSong = () => {
-    if (!songInfo) {
-      spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-        setCurrentTrackId(data.body?.item?.id)
+  const fetchCurrentSong = async () => {
+    if (songInfo) return
 
-        spotifyApi.getMyCurrentPlaybackState().then((data) => {
-          setIsPlaying(data.body?.is_playing)
-        })
-      })
+    try {
+      const response = await spotifyApi.getMyCurrentPlayingTrack()
+      setCurrentTrackId(response.body?.item?.id)
+
+      const response2 = await spotifyApi.getMyCurrentPlaybackState()
+      setIsPlaying(response2.body?.is_playing)
+    } catch (err) {
+      console.log(err)
     }
   }
 
-  const handlePlayPause = () => {
-    spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body.is_playing) {
-        spotifyApi.pause()
+  const handlePlayPause = async () => {
+    try {
+      const response = await spotifyApi.getMyCurrentPlaybackState()
+      if (response.statusCode === 204) {
+        await spotifyApi.play({
+          uris: [songInfo.album.uri],
+        })
+        setIsPlaying(true)
+        return
+      }
+
+      if (response.body.is_playing) {
+        await spotifyApi.pause()
         setIsPlaying(false)
       } else {
-        spotifyApi.play()
+        await spotifyApi.play()
         setIsPlaying(true)
       }
-    })
+    } catch (err) {
+      console.log(err)
+      if (err.body.error.reason !== 'PREMIUM_REQUIRED') return console.log(err)
+
+      setModal(true)
+    }
   }
 
   const debouncedAdjustVolume = useCallback(
-    debounce((volume) => {
-      spotifyApi.setVolume(volume)
+    debounce(async (volume) => {
+      try {
+        await spotifyApi.setVolume(volume)
+      } catch (err) {
+        if (err.body.error.reason === 'PREMIUM_REQUIRED') return
+
+        console.log(err)
+      }
     }, 500),
     []
   )
@@ -94,9 +119,9 @@ function Player() {
         <SwitchHorizontalIcon className="button" />
         <RewindIcon className="button" />
         {isPlaying ? (
-          <PauseIcon className="button h-10 w-10" onclick={handlePlayPause} />
+          <PauseIcon className="button h-10 w-10" onClick={handlePlayPause} />
         ) : (
-          <PlayIcon className="button h-10 w-10" onclick={handlePlayPause} />
+          <PlayIcon className="button h-10 w-10" onClick={handlePlayPause} />
         )}
         <FastForwardIcon className="button" />
         <ReplyIcon className="button" />
@@ -111,7 +136,7 @@ function Player() {
           className="w-14 md:w-28"
           type="range"
           value={volume}
-          onchange={(e) => setVolume(Number(e.target.value))}
+          onChange={(e) => setVolume(Number(e.target.value))}
           min={0}
           max={100}
         />

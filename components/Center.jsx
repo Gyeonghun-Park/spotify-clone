@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { shuffle } from 'lodash'
-import { ChevronDownIcon } from '@heroicons/react/outline'
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ExternalLinkIcon,
+} from '@heroicons/react/outline'
 import { playlistIdState, playlistState } from '@atoms/playlistAtom'
 import useSpotify from '@hooks/useSpotify'
 import { Songs } from '@components'
@@ -14,7 +18,7 @@ import playlistImg from '@images/playlist.svg'
 const style = {
   wrapper: `h-screen flex-grow overflow-y-scroll scrollbar-hide`,
   header: `absolute top-5 right-8`,
-  profileContainer: `flex cursor-pointer items-center space-x-3 rounded-full bg-[#202020] p-1 pr-2 text-white opacity-90 hover:opacity-80`,
+  profileContainer: `flex cursor-pointer items-center space-x-3 rounded-full bg-[#202020] pr-2 text-white opacity-90 hover:opacity-80`,
   profile: `rounded-full`,
   playlistContainer: `flex h-80 items-end space-x-7 bg-gradient-to-b to-[#202020] p-8 text-white`,
   playlistImg: `shadow-2xl`,
@@ -33,6 +37,7 @@ const colors = [
 
 function Center() {
   const [color, setColor] = useState()
+  const [isOpen, setIsOpen] = useState()
   const playlistId = useRecoilValue(playlistIdState)
   const [playlist, setPlaylist] = useRecoilState(playlistState)
   const { data: session } = useSession()
@@ -56,7 +61,10 @@ function Center() {
 
   return (
     <div className={style.wrapper}>
-      <header className={style.header}>
+      <header
+        className={style.header}
+        onClick={() => setIsOpen((prev) => !prev)}
+      >
         <div className={style.profileContainer}>
           {session?.user.image ? (
             <Image
@@ -67,7 +75,7 @@ function Center() {
               width={40}
             />
           ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#535353]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#282828]">
               <Image
                 className={style.profile}
                 src={profileImg}
@@ -78,8 +86,35 @@ function Center() {
             </div>
           )}
           <h2>{session?.user.name}</h2>
-          <ChevronDownIcon className="h-5 w-5" />
+          {isOpen ? (
+            <ChevronUpIcon className="h-5 w-5" />
+          ) : (
+            <ChevronDownIcon className="h-5 w-5" />
+          )}
         </div>
+        {isOpen && (
+          <ul
+            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto bg-[#282828] text-sm font-light text-white  shadow-[0_6px_8px_rgb(0,0,0,0.2)] focus:outline-none"
+            id="options"
+            role="listbox"
+          >
+            <li className="relative cursor-default select-none py-3 pl-3 pr-9 hover:bg-[#3E3E3E] ">
+              <span className="block truncate">Account</span>
+              <span className="absolute inset-y-0 right-0 flex items-center pr-4 ">
+                <ExternalLinkIcon className="h-5 w-5" />
+              </span>
+            </li>
+            <li className="relative cursor-default select-none py-3 pl-3 pr-9 hover:bg-[#3E3E3E]">
+              <span className="block truncate">Profile</span>
+            </li>
+            <li
+              className="relative cursor-default select-none py-3 pl-3 pr-9 hover:bg-[#3E3E3E]"
+              onClick={() => signOut()}
+            >
+              <span className="block truncate">Log out</span>
+            </li>
+          </ul>
+        )}
       </header>
 
       <section className={`${style.playlistContainer} ${color}`}>

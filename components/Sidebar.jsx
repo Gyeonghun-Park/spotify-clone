@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useRecoilState } from 'recoil'
 import {
   HomeIcon,
@@ -46,9 +46,6 @@ function Sidebar() {
   return (
     <div className={style.wrapper}>
       <div className={style.container}>
-        <button className={style.iconContainer} onClick={() => signOut()}>
-          <p>Log out</p>
-        </button>
         <button className={style.iconContainer}>
           <HomeIcon className={style.icon} />
           <p>Home</p>
