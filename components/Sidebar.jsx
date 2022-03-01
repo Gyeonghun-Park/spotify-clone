@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { useRecoilState } from 'recoil'
 import {
@@ -12,8 +13,11 @@ import {
 import useSpotify from '@hooks/useSpotify'
 import { playlistIdState } from '@atoms/playlistAtom'
 
+import spotifyImg from '@images/spotify.svg'
+import Link from 'next/link'
+
 const style = {
-  wrapper: `h-screen overflow-y-scroll border-r border-gray-900 bg-black p-5 text-xs lg:text-sm text-gray-500 scrollbar-hide sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex`,
+  wrapper: `h-screen overflow-y-scroll border-r border-gray-900 bg-black p-5 text-xs lg:text-sm text-gray-400 scrollbar-hide sm:min-w-[12rem] lg:min-w-[15rem] hidden md:inline-flex`,
   container: `space-y-4`,
   iconContainer: `flex items-center space-x-2 hover:text-white`,
   icon: `h-5 w-5`,
@@ -46,7 +50,17 @@ function Sidebar() {
   return (
     <div className={style.wrapper}>
       <div className={style.container}>
-        <button className={style.iconContainer}>
+        <Image
+          src={spotifyImg}
+          alt="Spotify image"
+          height={50}
+          width={100}
+          onClick={() => setPlaylistId(null)}
+        />
+        <button
+          className={style.iconContainer}
+          onClick={() => setPlaylistId(null)}
+        >
           <HomeIcon className={style.icon} />
           <p>Home</p>
         </button>

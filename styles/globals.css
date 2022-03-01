@@ -7,7 +7,3 @@
     @apply h-5 w-5 transform cursor-pointer transition duration-150 ease-in-out hover:scale-125;
   }
 }
-
-.test {
-  @apply flex flex-1 items-center justify-around self-center;
-}

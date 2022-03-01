@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { useRecoilState } from 'recoil'
 import useSpotify from '@hooks/useSpotify'
 import { millisToMinutesAndSeconds } from '@lib/time'
-import { currentTrackIdState, isPlayingState } from '@atoms/songAtom'
+import { currentTrackIdState } from '@atoms/songAtom'
 
 const style = {
   wrapper: `grid cursor-pointer grid-cols-2 rounded-lg py-4 px-5 text-[#949494] hover:bg-[#2A2A2A]`,
@@ -14,7 +14,7 @@ function Song({ order, track }) {
   const spotifyApi = useSpotify()
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState)
-  const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState)
+
   const clickSong = async () => {
     setCurrentTrackId(track.id)
   }
@@ -25,7 +25,6 @@ function Song({ order, track }) {
         <p>{order + 1}</p>
         <div>
           <Image
-            className={style.playlistImg}
             src={track?.album?.images[0].url}
             alt="Track image"
             height={50}

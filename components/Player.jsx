@@ -35,8 +35,10 @@ function Player() {
 
   const fetchCurrentSong = async () => {
     if (songInfo) return
+    if (!(spotifyApi && session)) return
 
     try {
+      await spotifyApi.setAccessToken(session.user.accessToken)
       const response = await spotifyApi.getMyCurrentPlayingTrack()
       setCurrentTrackId(response.body?.item?.id)
 

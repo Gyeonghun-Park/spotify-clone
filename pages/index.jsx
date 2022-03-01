@@ -1,7 +1,8 @@
 import Modal from 'react-modal'
 import { useRecoilValue } from 'recoil'
 import { modalState } from '@atoms/modalAtom'
-import { Sidebar, Center, Player, PremiumModal } from '@components'
+import { playlistIdState } from '@atoms/playlistAtom'
+import { Sidebar, Center, Player, PremiumModal, Home } from '@components'
 import Head from 'next/head'
 
 Modal.setAppElement('#__next')
@@ -28,8 +29,9 @@ const customStyles = {
   },
 }
 
-function Home() {
+function Main() {
   const modal = useRecoilValue(modalState)
+  const playlistId = useRecoilValue(playlistIdState)
 
   return (
     <div className={style.wrapper}>
@@ -50,7 +52,8 @@ function Home() {
 
       <main className={style.main}>
         <Sidebar />
-        <Center />
+
+        {playlistId ? <Center /> : <Home />}
       </main>
 
       <div className={style.player}>
@@ -64,4 +67,4 @@ function Home() {
   )
 }
 
-export default Home
+export default Main

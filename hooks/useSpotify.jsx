@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useSession, signIn } from 'next-auth/react'
+import { useSession, signIn, signOut } from 'next-auth/react'
 import SpotifyWebApi from 'spotify-web-api-node'
 
 const spotifyApi = new SpotifyWebApi({
@@ -12,15 +12,21 @@ function useSpotify() {
 
   useEffect(() => {
     if (!session) return
+    ;(async () => {
+      try {
+        if (session.error === 'RefreshAccessTokenError') {
+          signIn()
+        }
 
-    if (session.error === 'RefreshAccessTokenError') {
-      signIn()
-    }
+        await spotifyApi.setAccessToken(session.user.accessToken)
+        await spotifyApi.getMe()
+      } catch (err) {
+        if (err.body.error.message === 'The access token expired')
+          return signOut()
 
-    console.log(1, session.user.accessToken)
-    console.log('The access token is ' + spotifyApi.getAccessToken())
-
-    spotifyApi.setAccessToken(session.user.accessToken)
+        console.log(JSON.stringify(err))
+      }
+    })()
   }, [session])
 
   return spotifyApi
